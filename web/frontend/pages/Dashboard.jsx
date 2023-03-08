@@ -7,12 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { setEditId } from "../redux/actions/upsell";
 import { useDispatch } from "react-redux";
 
-export default function  Dashboard() {
+export default function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const createNewUpsell = () => {
     navigate("/newupsell", { replace: true, reloadDocument: true });
     dispatch(setEditId(""));
+  };
+  const customizePopup = () => {
+    navigate("/customizePopup", { replace: true, reloadDocument: true });
   };
   return (
     <Page
@@ -20,7 +23,10 @@ export default function  Dashboard() {
       divider={true}
       title="Dashboard"
       compactTitle
-      primaryAction={{ content: "New upsell", onAction: createNewUpsell }}
+      secondaryActions={[
+        { content: "New upsell", onAction: createNewUpsell },
+        { content: "Customize Popup", onAction: customizePopup },
+      ]}
     >
       <Card title="Upsells overview">
         <ListTabs />

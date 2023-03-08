@@ -11,28 +11,42 @@ function SearchProduct({
   openPickerProduct,
   setOpenPickerProduct,
   selectedProduct,
+  editId,
 }) {
-  const handleSelectProduct = (resources) => {
-    let specificProduct = [];
-    resources.selection.map((product) => {
+  let specificProduct = [];
+
+  if (selectedProduct?.specificProduct !== 'all_products') {
+    selectedProduct?.specificProduct?.map((product) => {
       specificProduct.push(product);
-      setSelectedProduct((state) => ({ ...state, specificProduct }));
     });
+  }
+
+  const handleSelectProduct = (resources) => {
+    resources.selection.forEach((product) => {
+      const exists = specificProduct.some((item) => item.id === product.id);
+      if (!exists) {
+        specificProduct.push(product);
+      }
+    });
+    setSelectedProduct((state) => ({ ...state, specificProduct }));
     setOpenPickerProduct(false);
   };
   return (
     newUpsell.display_for === "Product" && (
       <Stack>
         <Spasing margin={"10px"}>
-          <Button
-            disabled={!selectedProduct}
-            primary
-            onClick={() => setOpenPickerProduct(true)}
-          >
-            Select {newUpsell.display_for}
-          </Button>
+          {!editId && (
+            <Button
+              disabled={!selectedProduct}
+              primary
+              onClick={() => setOpenPickerProduct(true)}
+            >
+              Select {newUpsell.display_for}
+            </Button>
+          )}
         </Spasing>
         <ResourcePicker
+          initialSelectionIds={specificProduct}
           resourceType="Product"
           showVariants={false}
           open={openPickerProduct}

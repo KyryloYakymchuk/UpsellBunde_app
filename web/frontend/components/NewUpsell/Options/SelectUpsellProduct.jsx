@@ -20,11 +20,12 @@ function SelectUpsellProduct({ selectedProduct, setSelectedProduct }) {
       <div>
         {selectedProduct ? (
           <ProductBox>
-            <ProductImage src={selectedProduct?.images[0]?.originalSrc} alt="" />
+            <ProductImage
+              src={selectedProduct?.images[0]?.originalSrc}
+              alt=""
+            />
             {selectedProduct.title}
-            <span onClick={() => (setSelectedProduct(), setOpenProduct(true))}>
-              Change
-            </span>
+            <span onClick={() => setOpenProduct(true)}>Change</span>
           </ProductBox>
         ) : (
           <Button primary onClick={() => setOpenProduct(true)}>

@@ -15,7 +15,7 @@ function CustomWording({ customTextWording, setCustomTextWording }) {
   };
   return (
     <Card title="Custom wording" sectioned>
-      <p>Customize or translate the wording of the pop-up window.</p>
+      <p>Customize wording of the pop-up window.</p>
       <Spasing margin={"0 0 20px 0"} />
       <strong>Pop-Up</strong>
       <Spasing />

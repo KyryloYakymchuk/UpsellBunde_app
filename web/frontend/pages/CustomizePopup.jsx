@@ -119,14 +119,14 @@ export default function CustomizePopup() {
       multiline: 0,
       maxLength: 30,
     },
-    {
-      label: "Button — Back",
-      value: "Back",
-      helpText: "Back button displayed on the upsell detail page.",
-      change: "popupBackText",
-      multiline: 0,
-      maxLength: 50,
-    },
+    // {
+    //   label: "Button — Back",
+    //   value: "Back",
+    //   helpText: "Back button displayed on the upsell detail page.",
+    //   change: "popupBackText",
+    //   multiline: 0,
+    //   maxLength: 50,
+    // },
   ]);
 
   const [upsellFromDb, setUpsellFromDb] = useState([]);

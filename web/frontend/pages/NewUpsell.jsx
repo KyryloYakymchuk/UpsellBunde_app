@@ -8,13 +8,13 @@ import DisplaysFor from "../components/NewUpsell/DisplaysFor";
 import AdditionalSettings from "../components/NewUpsell/AdditionalSettings";
 import { useContext } from "react";
 import { Context } from "../index";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setEditId } from "../redux/actions/upsell";
 
-export default function  NewUpsell() {
+export default function NewUpsell() {
   const [newUpsell, setNewUpsell] = useState({
     name: "",
     description: "",
@@ -46,75 +46,114 @@ export default function  NewUpsell() {
   const [selectedProduct, setSelectedProduct] = useState();
   const { db } = useContext(Context);
   const { editId } = useSelector((state) => state.upsellReducer);
-
   const dispatch = useDispatch();
+console.log(selectedProduct);
   const saveChanges = () => {
     let selectedProductObj = {
-      id: selectedProduct.variants.map(({ id }) => id.split("/").slice(-1)[0])[0],
+      id: selectedProduct.variants.map(
+        ({ id }) => id.split("/").slice(-1)[0]
+      )[0],
       title: selectedProduct.title,
       handle: selectedProduct.handle,
-      description: selectedProduct.descriptionHtml || '',
+      description: selectedProduct.descriptionHtml || "",
       totalInventory: selectedProduct.totalInventory,
       images: selectedProduct.images[0]?.originalSrc || "",
       options: selectedProduct.options,
       specificProduct:
-      newUpsell.display_for !== 'all_products' ?
-        selectedProduct.specificProduct?.map((spec) => ({
-          id: spec.id.split("/").slice(-1)[0],
-          title: spec.title,
-          handle: spec.handle,
-          totalInventory: spec.totalInventory,
-          images: spec.images[0]?.originalSrc || "",
-          options: spec.options,
-          description: spec.descriptionHtml || '',
-          variants: spec.variants.map((variant) => ({
-            availableForSale: variant.availableForSale,
-            compareAtPrice: variant.compareAtPrice || "",
-            price: variant.price,
-            inventoryQuantity: variant.inventoryQuantity,
-            description: spec.descriptionHtml || '',
-            displayName: variant.title || '',
-             title: spec.title,
-            image: variant.image?.originalSrc || "",
-            id: variant.id.split("/").slice(-1)[0],
-          })),
-        })) : "all_products",
+        newUpsell.display_for !== "all_products"
+          ? selectedProduct.specificProduct?.map((spec) => ({
+              id: spec.id.split("/").slice(-1)[0],
+              title: spec.title,
+              handle: spec.handle,
+              totalInventory: spec.totalInventory,
+              images: spec.images[0]?.originalSrc || "",
+              options: spec.options,
+              description: spec.descriptionHtml || "",
+              variants: spec.variants.map((variant) => ({
+                availableForSale: variant.availableForSale,
+                compareAtPrice: variant.compareAtPrice || "",
+                price: variant.price,
+                inventoryQuantity: variant.inventoryQuantity,
+                description: spec.descriptionHtml || "",
+                displayName: variant.title || "",
+                title: spec.title,
+                image: variant.image?.originalSrc || "",
+                id: variant.id.split("/").slice(-1)[0],
+              })),
+            }))
+          : "all_products",
       variants: selectedProduct.variants.map((variant) => ({
         availableForSale: variant.availableForSale,
         compareAtPrice: variant.compareAtPrice || "",
         price: variant.price,
-        description: selectedProduct.descriptionHtml || '',
+        description: selectedProduct.descriptionHtml || "",
         inventoryQuantity: variant.inventoryQuantity,
-        displayName: variant.title || '',
+        displayName: variant.title || "",
         image: variant.image?.originalSrc || "",
         id: variant.id.split("/").slice(-1)[0],
       })),
     };
-    if (newUpsell.display_for !== 'all_products') {
-      selectedProduct.specificProduct.map(({ id }, index) => {
-        setDoc(doc(db, window.location.hostname, id.split("/").slice(-1)[0]), {
-          newUpsell,
-          conditions,
-          selectedProductObj: {
-            ...selectedProductObj,
-            specificProduct: [selectedProductObj.specificProduct[index]],
-          },
+
+    if (newUpsell.display_for !== "all_products") {
+      if (editId) {
+        selectedProduct.specificProduct.map(({ id }, index) => {
+          const docRef = doc(
+            db,
+            window.location.hostname,
+            id.split("/").slice(-1)[0]
+          );
+          updateDoc(docRef, {
+            newUpsell,
+            conditions,
+            selectedProductObj: {
+              ...selectedProductObj,
+              specificProduct: [selectedProductObj.specificProduct[index]],
+            },
+          });
         });
-      });
+      } else {
+        selectedProduct.specificProduct.map(({ id }, index) => {
+          setDoc(
+            doc(db, window.location.hostname, id.split("/").slice(-1)[0]),
+            {
+              newUpsell,
+              conditions,
+              selectedProductObj: {
+                ...selectedProductObj,
+                specificProduct: [selectedProductObj.specificProduct[index]],
+              },
+            }
+          );
+        });
+      }
     } else {
-      setDoc(
-        doc(
+      if (editId) {
+        const docRef = doc(
           db,
           window.location.hostname,
           newUpsell.display_for +
             `-${selectedProductObj.id.split("/").slice(-1)[0]}`
-        ),
-        {
+        );
+        updateDoc(docRef, {
           newUpsell,
           conditions,
           selectedProductObj,
-        }
-      );
+        });
+      } else {
+        setDoc(
+          doc(
+            db,
+            window.location.hostname,
+            newUpsell.display_for +
+              `-${selectedProductObj.id.split("/").slice(-1)[0]}`
+          ),
+          {
+            newUpsell,
+            conditions,
+            selectedProductObj,
+          }
+        );
+      }
     }
     goBackClick();
     dispatch(setEditId(""));
@@ -140,6 +179,11 @@ export default function  NewUpsell() {
     }
   }, [editId]);
 
+  useEffect(() => {
+    if(selectedProduct?.specificProduct?.length){
+      setSelectedProduct((state) => ({ ...state, specificProduct:'all_products' }));
+    }
+  }, [newUpsell.display_for]);
   return (
     <Page
       breadcrumbs={[{ onAction: goBackClick }]}
@@ -147,7 +191,10 @@ export default function  NewUpsell() {
       primaryAction={{
         content: "Save",
         onAction: saveChanges,
-        disabled: !selectedProduct,
+        disabled:
+          !selectedProduct ||
+          (newUpsell.display_for === "Product" &&
+            !selectedProduct.specificProduct?.length),
       }}
       title="Additional Product"
       titleMetadata={
@@ -179,6 +226,7 @@ export default function  NewUpsell() {
             setConditions={setConditions}
             selectedProduct={selectedProduct}
             setSelectedProduct={setSelectedProduct}
+            editId={editId}
           />
           <AdditionalSettings
             handleChange={handleChange}
@@ -202,4 +250,3 @@ export default function  NewUpsell() {
     </Page>
   );
 }
-

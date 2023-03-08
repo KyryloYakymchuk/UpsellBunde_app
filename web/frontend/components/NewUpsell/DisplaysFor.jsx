@@ -16,6 +16,7 @@ function DisplaysFor({
   setConditions,
   selectedProduct,
   setSelectedProduct,
+  editId
 }) {
   const [openPickerProduct, setOpenPickerProduct] = useState(false);
   return (
@@ -27,7 +28,7 @@ function DisplaysFor({
         handleChange={handleChange}
         newUpsell={newUpsell.display_for}
         radiobutton_data={display_radiobutton}
-        selectedProduct={selectedProduct}
+        selectedProduct={selectedProduct && !editId}
       />
       <SearchProduct
         newUpsell={newUpsell}
@@ -35,6 +36,7 @@ function DisplaysFor({
         openPickerProduct={openPickerProduct}
         setOpenPickerProduct={setOpenPickerProduct}
         selectedProduct={selectedProduct}
+        editId={editId}
       />
 
       {selectedProduct?.specificProduct !== 'all_products'  &&
@@ -42,7 +44,8 @@ function DisplaysFor({
           <ProductBox key={index}>
             <ProductImage src={data?.images[0]?.originalSrc} alt="" />
             {data.title}
-            {index === 0 && (
+            
+            {!editId && index === 0 && (
               <span
                 onClick={() => (
                   setSelectedProduct((state) => ({
