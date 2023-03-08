@@ -8,7 +8,6 @@ function DisplayRadiobutton({
   selectedProduct,
 }) {
   return (
-    <>
       <Stack>
         {radiobutton_data.map(({ label, id, name }) => (
           <RadioButton
@@ -22,7 +21,6 @@ function DisplayRadiobutton({
           />
         ))}
       </Stack>
-    </>
   );
 }
 

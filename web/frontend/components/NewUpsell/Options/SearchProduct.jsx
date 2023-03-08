@@ -15,7 +15,7 @@ function SearchProduct({
 }) {
   let specificProduct = [];
 
-  if (selectedProduct?.specificProduct !== 'all_products') {
+  if (selectedProduct?.specificProduct !== 'all_productsweb') {
     selectedProduct?.specificProduct?.map((product) => {
       specificProduct.push(product);
     });
