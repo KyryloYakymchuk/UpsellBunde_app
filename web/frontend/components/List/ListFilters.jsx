@@ -9,57 +9,64 @@ import { useEffect } from "react";
 
 function ListFilters({ getListData, upsellFromDb, setUpsellFromDb }) {
   const [sortValue, setSortValue] = useState("all");
-  const handleQueryValueRemove = useCallback(() => setQueryValue(null), []);
-  const handleSortChange = useCallback((value) => setSortValue(value), []);
+  const [queryValue, setQueryValue] = useState(null);
+
+  const handleQueryValueRemove = useCallback(() => clearSearchValue(), []);
+  const handleSortChange = useCallback((value) => sortingUpsell(value), []);
   const handleClearAll = useCallback(() => {
     handleQueryValueRemove();
   }, [handleQueryValueRemove]);
-  console.log(sortValue);
-  const [queryValue, setQueryValue] = useState(null);
+
+  const clearSearchValue = () => {
+    setQueryValue(null);
+    getListData();
+    setSortValue("all");
+  };
+  const sortingUpsell = (sort) => {
+    setSortValue(sort);
+    // if (!upsellFromDb.length) {
+    //   getListData();
+    // }
+    if (sort === "all") {
+      getListData();
+    } else {
+      const sorderUpsells = upsellFromDb.filter(({ upsellSettings }) => {
+        return (
+          upsellSettings.status === sort || upsellSettings.display_for === sort
+        );
+      });
+      setUpsellFromDb(sorderUpsells);
+    }
+  };
+
   useEffect(() => {
     if (queryValue) {
-      if (!upsellFromDb.length) {
-        getListData();
-      }
-      const filteredUpsells = upsellFromDb.filter(({ upsellSettings }) => {
-        for (const key in upsellSettings) {
-          if (
-            upsellSettings.hasOwnProperty(key) &&
-            String(upsellSettings[key])
-              .toLowerCase()
-              .includes(queryValue.toLowerCase())
-          ) {
-            return true;
-          }
-        }
-        return false;
-      });
-      setUpsellFromDb(filteredUpsells);
+      // if (!upsellFromDb.length) {
+      //   getListData();
+      //   searchUpsell();
+      // }
+      searchUpsell();
     } else {
       getListData();
     }
   }, [queryValue]);
 
-  useEffect(() => {
-    // getListData();
-
-    console.log(upsellFromDb);
-
-    if (!upsellFromDb.length) {
-      getListData();
-    }
-    if (sortValue === "all") {
-      getListData();
-    } else {
-      const sorderUpsells = upsellFromDb.filter(({ upsellSettings }) => {
-        return (
-          upsellSettings.status === sortValue ||
-          upsellSettings.display_for === sortValue
-        );
-      });
-      setUpsellFromDb(sorderUpsells);
-    }
-  }, [sortValue, upsellFromDb.length]);
+  const searchUpsell = () => {
+    const filteredUpsells = upsellFromDb.filter(({ upsellSettings }) => {
+      for (const key in upsellSettings) {
+        if (
+          upsellSettings.hasOwnProperty(key) &&
+          String(upsellSettings[key])
+            .toLowerCase()
+            .includes(queryValue.toLowerCase())
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+    setUpsellFromDb(filteredUpsells);
+  };
 
   return (
     <div style={{ padding: "16px", display: "flex" }}>
