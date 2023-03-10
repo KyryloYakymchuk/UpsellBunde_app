@@ -16,7 +16,7 @@ import { setEditId } from "../redux/actions/upsell";
 
 export default function NewUpsell() {
   const [newUpsell, setNewUpsell] = useState({
-    name: "",
+    name: "Upsell",
     description: "",
     discount_available: false,
     discount_value: "",
@@ -32,6 +32,7 @@ export default function NewUpsell() {
     display_custom_note: false,
     // match_product_qty: false,
     qty_selector_on_popup: false,
+    display_if_out_of_stock:false,
     status: "Active",
   });
 
@@ -47,7 +48,6 @@ export default function NewUpsell() {
   const { db } = useContext(Context);
   const { editId } = useSelector((state) => state.upsellReducer);
   const dispatch = useDispatch();
-console.log(selectedProduct);
   const saveChanges = () => {
     let selectedProductObj = {
       id: selectedProduct.variants.map(

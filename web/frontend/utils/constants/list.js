@@ -7,9 +7,11 @@ export const headings = [
 ];
 
 export const sortOptions = [
-  { label: "Today", value: "today" },
-  // { label: "Yesterday", value: "yesterday" },
-  // { label: "Last 7 days", value: "lastWeek" },
+  { label: "All upsells", value: "all" },
+  { label: "Active", value: "Active" },
+  { label: "Draft", value: "Draft" },
+  { label: "Display for all product", value: "all_products" },
+  { label: "Display for specific ", value: "Product" },
 ];
 
 export const resourceName = {

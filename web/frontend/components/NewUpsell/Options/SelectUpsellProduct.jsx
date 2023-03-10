@@ -2,10 +2,15 @@ import { ResourcePicker } from "@shopify/app-bridge-react";
 import { Button, Stack } from "@shopify/polaris";
 import React from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { ProductBox, ProductImage } from "../../style";
 
 function SelectUpsellProduct({ selectedProduct, setSelectedProduct }) {
   const [openProduct, setOpenProduct] = useState(false);
+
+  const { editId } = useSelector((state) => state.upsellReducer);
+
+console.log(selectedProduct);
   const handleSelectProduct = (resources) => {
     resources.selection.map((product) => setSelectedProduct(product));
     setOpenProduct(false);
@@ -21,11 +26,14 @@ function SelectUpsellProduct({ selectedProduct, setSelectedProduct }) {
         {selectedProduct ? (
           <ProductBox>
             <ProductImage
-              src={selectedProduct?.images[0]?.originalSrc}
+              src={selectedProduct?.images[0]?.originalSrc || selectedProduct.images}
               alt=""
             />
             {selectedProduct.title}
+          {!editId && (
+
             <span onClick={() => setOpenProduct(true)}>Change</span>
+          )}
           </ProductBox>
         ) : (
           <Button primary onClick={() => setOpenProduct(true)}>

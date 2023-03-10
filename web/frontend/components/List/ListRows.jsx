@@ -4,7 +4,6 @@ import { EditMajor, DeleteMajor } from "@shopify/polaris-icons";
 import React from "react";
 
 function ListRows({ handleEdit, handleDelete, data, selectedResources }) {
-  console.log(data);
   return data?.map(({ upsellSettings, id, selectedProductObj }, index) => (
     <IndexTable.Row
       id={id}
@@ -18,20 +17,25 @@ function ListRows({ handleEdit, handleDelete, data, selectedResources }) {
         </div>
       </IndexTable.Cell>
       <IndexTable.Cell>
-        <Badge status={upsellSettings?.status === "Active" ? "success" : "info"}>
+        <Badge
+          status={upsellSettings?.status === "Active" ? "success" : "info"}
+        >
           {upsellSettings?.status}
         </Badge>
       </IndexTable.Cell>
       <IndexTable.Cell>Add to cart</IndexTable.Cell>
       <IndexTable.Cell>
-        {upsellSettings?.display_for.replace("_", " ")} - {selectedProductObj.handle} {selectedProductObj.specificProduct[0].handle && '- ' + selectedProductObj.specificProduct[0].handle}
+        {upsellSettings?.display_for.replace("_", " ")} -{" "}
+        {selectedProductObj.handle}{" "}
+        {selectedProductObj.specificProduct[0].handle &&
+          "- " + selectedProductObj.specificProduct[0].handle}
       </IndexTable.Cell>
       <IndexTable.Cell>
-        <Button onClick={() => handleEdit(upsellSettings.display_for === 'all_products' ? `all_products-${id}` : id)}>
+        <Button onClick={() => handleEdit(id)}>
           <Icon source={EditMajor} color="base" />
         </Button>
 
-        <Button onClick={() => handleDelete(upsellSettings.display_for === 'all_products' ? `all_products-${id}` : id)}>
+        <Button onClick={() => handleDelete(id)}>
           <Icon source={DeleteMajor} color="base" />
         </Button>
       </IndexTable.Cell>

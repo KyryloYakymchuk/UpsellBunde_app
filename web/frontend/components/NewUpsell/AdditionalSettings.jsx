@@ -1,8 +1,31 @@
-import { Card, Checkbox, Select, Stack } from "@shopify/polaris";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Checkbox,
+  Heading,
+  Select,
+  Stack,
+} from "@shopify/polaris";
+import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
+import { useContext } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { upsell_position } from "../../utils/constants/newUpsell";
+import { Spasing } from "../style";
+import { Context } from "../../index";
+import { useNavigate } from "react-router-dom";
 
 function AdditionalSettings({ handleChange, newUpsell }) {
+  const { editId } = useSelector((state) => state.upsellReducer);
+  const [deleteSattus, setDeleteStatus] = useState(false);
+  const { db } = useContext(Context);
+  const navigate = useNavigate();
+  const handleDeleteUpsell = async (id) => {
+    await deleteDoc(doc(db, window.location.hostname, id));
+    navigate("/dashboard", { replace: true, reloadDocument: true });
+  };
   return (
     <Card sectioned title="Additional settings">
       <Select
@@ -34,6 +57,11 @@ function AdditionalSettings({ handleChange, newUpsell }) {
           checked={newUpsell.display_custom_note}
           onChange={handleChange("display_custom_note")}
         />
+        <Checkbox
+          label="Display upsell if product out of stock"
+          checked={newUpsell.display_if_out_of_stock}
+          onChange={handleChange("display_if_out_of_stock")}
+        />
       </Stack>
       <br />
       <Stack vertical>
@@ -50,6 +78,25 @@ function AdditionalSettings({ handleChange, newUpsell }) {
         />{" "}
       </Stack>
       <br />
+      <Spasing />
+      {editId && !deleteSattus && (
+        <Button onClick={() => setDeleteStatus(true)} destructive>
+          Delete upsell
+        </Button>
+      )}
+
+      {deleteSattus && (
+        <>
+          <ButtonGroup>
+            <Button onClick={() => setDeleteStatus(false)} primary>
+              No, Cancel
+            </Button>
+            <Button onClick={() => handleDeleteUpsell(editId)}>
+              Yes, Delete
+            </Button>
+          </ButtonGroup>
+        </>
+      )}
     </Card>
   );
 }

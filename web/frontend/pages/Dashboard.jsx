@@ -29,7 +29,7 @@ export default function Dashboard() {
       ]}
     >
       <Card title="Upsells overview">
-        <ListTabs />
+        {/* <ListTabs /> */}
         <List />
       </Card>
     </Page>

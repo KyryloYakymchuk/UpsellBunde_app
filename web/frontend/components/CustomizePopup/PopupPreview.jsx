@@ -52,17 +52,19 @@ function PopupPreview({ settings, color, customTextWording }) {
                 <p>39,99 $</p>
                 <p>Upgrade your life and become digital</p>
               </ProductInfo>
-              <CustomizeButton
-                buttonStyles={`background-color:${color[0].background}; color:${
-                  color[0].text
-                }; ${
-                  color[0].border
-                    ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
-                    : `border:none`
-                } `}
-              >
-                {customTextWording[4].value}
-              </CustomizeButton>
+              <ProductButtonWrapper>
+                <CustomizeButton
+                  buttonStyles={`background-color:${
+                    color[0].background
+                  }; color:${color[0].text}; ${
+                    color[0].border
+                      ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
+                      : `border:none`
+                  } `}
+                >
+                  {customTextWording[4].value}
+                </CustomizeButton>
+              </ProductButtonWrapper>
             </PopupProduct>
             <PopupProduct>
               <ProductImage
@@ -83,17 +85,19 @@ function PopupPreview({ settings, color, customTextWording }) {
                   value={"Today"}
                 />
               </ProductInfo>
-              <CustomizeButton
-                buttonStyles={`background-color:${color[0].background}; color:${
-                  color[0].text
-                }; ${
-                  color[0].border
-                    ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
-                    : `border:none`
-                } `}
-              >
-                {customTextWording[2].value}
-              </CustomizeButton>
+              <ProductButtonWrapper>
+                <CustomizeButton
+                  buttonStyles={`background-color:${
+                    color[0].background
+                  }; color:${color[0].text}; ${
+                    color[0].border
+                      ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
+                      : `border:none`
+                  } `}
+                >
+                  {customTextWording[2].value}
+                </CustomizeButton>
+              </ProductButtonWrapper>
             </PopupProduct>
             <PopupProduct>
               <div style={{ position: "relative" }}>
@@ -115,18 +119,20 @@ function PopupPreview({ settings, color, customTextWording }) {
                 <p>39,99 $</p>
                 <p>Upgrade your life and become digital</p>
               </ProductInfo>
-              <CustomizeButton
-                disabled
-                buttonStyles={`background-color:${color[0].background}; color:${
-                  color[0].text
-                }; ${
-                  color[0].border
-                    ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
-                    : `border:none`
-                } `}
-              >
-                {customTextWording[3].value}
-              </CustomizeButton>
+              <ProductButtonWrapper>
+                <CustomizeButton
+                  disabled
+                  buttonStyles={`background-color:${
+                    color[0].background
+                  }; color:${color[0].text}; ${
+                    color[0].border
+                      ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
+                      : `border:none`
+                  } `}
+                >
+                  {customTextWording[3].value}
+                </CustomizeButton>
+              </ProductButtonWrapper>
             </PopupProduct>
           </UpsellItems>
           <Spasing />
@@ -165,6 +171,11 @@ function PopupPreview({ settings, color, customTextWording }) {
 }
 
 export default PopupPreview;
+
+const ProductButtonWrapper = styled.div`
+  max-width: 200px;
+
+`;
 const ButtonGroup = styled.div`
   display: flex;
   gap: 20px;
@@ -188,8 +199,14 @@ const CustomizeButton = styled.button`
   padding: 10px 15px;
   margin-left: auto;
   cursor: pointer;
+  width: 100%;
   &:disabled {
     filter: opacity(0.5);
+  }
+  transition:0.4s;
+  &:hover{
+    transition:0.4s;
+    transform: scale(1.1);
   }
 `;
 const ProductImage = styled.img`

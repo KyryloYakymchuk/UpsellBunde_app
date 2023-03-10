@@ -57,8 +57,6 @@ function List() {
     });
   };
   const handleDelete = async (id) => {
-    console.log(id);
-
     await deleteDoc(doc(db, window.location.hostname, id));
     setTimeout(() => {
       getListData();
@@ -85,7 +83,9 @@ function List() {
         productArr.push({
           upsellSettings: upsells.data()?.newUpsell,
           selectedProductObj: upsells.data()?.selectedProductObj,
-          id: upsells.data()?.selectedProductObj?.specificProduct[0]?.id || upsells.data()?.selectedProductObj.id,
+          id:
+            upsells.data()?.selectedProductObj?.specificProduct[0]?.id ||
+            "all_products-" + upsells.data()?.selectedProductObj.id,
         });
       }
     });
@@ -93,14 +93,17 @@ function List() {
     setLoading(false);
   };
   const handleEdit = (id) => {
-    console.log(id);
     dispatch(setEditId(id));
     navigate("/newupsell", { replace: true, reloadDocument: true });
   };
 
   return (
     <>
-      <ListFilters />
+      <ListFilters
+        getListData={getListData}
+        upsellFromDb={upsellFromDb}
+        setUpsellFromDb={setUpsellFromDb}
+      />
       <IndexTable
         loading={loading}
         resourceName={resourceName}

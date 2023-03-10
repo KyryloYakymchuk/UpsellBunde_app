@@ -18,6 +18,8 @@ function DisplaysFor({
   setSelectedProduct,
   editId
 }) {
+console.log( selectedProduct?.specificProduct)
+
   const [openPickerProduct, setOpenPickerProduct] = useState(false);
   return (
     <Card title="Displays for" sectioned>
@@ -38,11 +40,10 @@ function DisplaysFor({
         selectedProduct={selectedProduct}
         editId={editId}
       />
-
       {selectedProduct?.specificProduct !== 'all_products'  &&
         selectedProduct?.specificProduct?.map((data, index) => (
           <ProductBox key={index}>
-            <ProductImage src={data?.images[0]?.originalSrc} alt="" />
+            <ProductImage src={data?.images[0]?.originalSrc || data.images} alt="" />
             {data.title}
             
             {!editId && index === 0 && (

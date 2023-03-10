@@ -14,8 +14,8 @@ function SearchProduct({
   editId,
 }) {
   let specificProduct = [];
-
-  if (selectedProduct?.specificProduct !== 'all_productsweb') {
+console.log(selectedProduct);
+  if (selectedProduct?.specificProduct !== 'all_products') {
     selectedProduct?.specificProduct?.map((product) => {
       specificProduct.push(product);
     });
