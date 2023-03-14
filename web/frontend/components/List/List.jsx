@@ -74,21 +74,36 @@ function List() {
       getListData();
     }, 500);
   };
-  const getListData = async () => {
+  const getListData = async (sort) => {
     setLoading(true);
     const docSnap = await getDocs(collection(db, window.location.hostname));
     let productArr = [];
+
+    const pushUpsellToArr = (upsells) => {
+      productArr.push({
+        upsellSettings: upsells?.newUpsell,
+        selectedProductObj: upsells?.selectedProductObj,
+        id:
+          upsells?.selectedProductObj?.specificProduct[0]?.id ||
+          "all_products-" + upsells?.selectedProductObj.id,
+      });
+    };
     docSnap.forEach((upsells) => {
-      if (upsells.data()?.newUpsell) {
-        productArr.push({
-          upsellSettings: upsells.data()?.newUpsell,
-          selectedProductObj: upsells.data()?.selectedProductObj,
-          id:
-            upsells.data()?.selectedProductObj?.specificProduct[0]?.id ||
-            "all_products-" + upsells.data()?.selectedProductObj.id,
-        });
+      if (sort && sort !== "all") {
+        if (
+          (upsells.data()?.newUpsell &&
+            upsells.data().newUpsell.status === sort) ||
+          upsells.data().newUpsell.display_for === sort
+        ) {
+          pushUpsellToArr(upsells.data());
+        }
+      } else {
+        if (upsells.data()?.newUpsell) {
+          pushUpsellToArr(upsells.data());
+        }
       }
     });
+
     setUpsellFromDb(productArr);
     setLoading(false);
   };

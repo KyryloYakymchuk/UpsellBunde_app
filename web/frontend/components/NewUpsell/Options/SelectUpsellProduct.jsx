@@ -5,14 +5,23 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { ProductBox, ProductImage } from "../../style";
 
-function SelectUpsellProduct({ selectedProduct, setSelectedProduct }) {
+function SelectUpsellProduct({
+  selectedProduct,
+  setSelectedProduct,
+  handleChange,
+  newUpsell,
+}) {
   const [openProduct, setOpenProduct] = useState(false);
 
   const { editId } = useSelector((state) => state.upsellReducer);
 
-console.log(selectedProduct);
   const handleSelectProduct = (resources) => {
-    resources.selection.map((product) => setSelectedProduct(product));
+    resources.selection.map((product) => {
+      setSelectedProduct(product);
+      if (newUpsell.name.includes('Upsell')) {
+        handleChange("name", 'Upsell' + " - " + product.handle)();
+      }
+    });
     setOpenProduct(false);
   };
   return (
@@ -26,14 +35,16 @@ console.log(selectedProduct);
         {selectedProduct ? (
           <ProductBox>
             <ProductImage
-              src={selectedProduct?.images[0]?.originalSrc || selectedProduct.images}
+              src={
+                selectedProduct?.images[0]?.originalSrc ||
+                selectedProduct.images
+              }
               alt=""
             />
             {selectedProduct.title}
-          {!editId && (
-
-            <span onClick={() => setOpenProduct(true)}>Change</span>
-          )}
+            {!editId && (
+              <span onClick={() => setOpenProduct(true)}>Change</span>
+            )}
           </ProductBox>
         ) : (
           <Button primary onClick={() => setOpenProduct(true)}>

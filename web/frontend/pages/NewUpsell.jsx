@@ -32,10 +32,9 @@ export default function NewUpsell() {
     display_custom_note: false,
     // match_product_qty: false,
     qty_selector_on_popup: false,
-    display_if_out_of_stock:false,
+    display_if_out_of_stock: false,
     status: "Active",
   });
-
   const [conditions, setConditions] = useState([
     {
       first: "product_title",
@@ -93,6 +92,8 @@ export default function NewUpsell() {
         id: variant.id.split("/").slice(-1)[0],
       })),
     };
+console.log(selectedProduct);
+    console.log(selectedProductObj);
 
     if (newUpsell.display_for !== "all_products") {
       if (editId) {
@@ -180,8 +181,11 @@ export default function NewUpsell() {
   }, [editId]);
 
   useEffect(() => {
-    if(selectedProduct?.specificProduct?.length){
-      setSelectedProduct((state) => ({ ...state, specificProduct:'all_products' }));
+    if (selectedProduct?.specificProduct?.length) {
+      setSelectedProduct((state) => ({
+        ...state,
+        specificProduct: "all_products",
+      }));
     }
   }, [newUpsell.display_for]);
   return (

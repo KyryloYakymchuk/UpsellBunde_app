@@ -12,13 +12,10 @@ import { useState } from "react";
 function DisplaysFor({
   handleChange,
   newUpsell,
-  conditions,
-  setConditions,
   selectedProduct,
   setSelectedProduct,
   editId
 }) {
-console.log( selectedProduct?.specificProduct)
 
   const [openPickerProduct, setOpenPickerProduct] = useState(false);
   return (

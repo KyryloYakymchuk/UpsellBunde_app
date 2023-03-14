@@ -18,6 +18,8 @@ function Product({
         <SelectUpsellProduct
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
+          handleChange={handleChange}
+          newUpsell={newUpsell}
         />
         <Description handleChange={handleChange} newUpsell={newUpsell} />
         <ApplyDiscount handleChange={handleChange} newUpsell={newUpsell} />

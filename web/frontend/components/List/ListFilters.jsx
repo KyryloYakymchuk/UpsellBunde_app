@@ -24,27 +24,11 @@ function ListFilters({ getListData, upsellFromDb, setUpsellFromDb }) {
   };
   const sortingUpsell = (sort) => {
     setSortValue(sort);
-    // if (!upsellFromDb.length) {
-    //   getListData();
-    // }
-    if (sort === "all") {
-      getListData();
-    } else {
-      const sorderUpsells = upsellFromDb.filter(({ upsellSettings }) => {
-        return (
-          upsellSettings.status === sort || upsellSettings.display_for === sort
-        );
-      });
-      setUpsellFromDb(sorderUpsells);
-    }
+    getListData(sort);
   };
 
   useEffect(() => {
     if (queryValue) {
-      // if (!upsellFromDb.length) {
-      //   getListData();
-      //   searchUpsell();
-      // }
       searchUpsell();
     } else {
       getListData();
