@@ -1,4 +1,4 @@
-import { Card, Checkbox, Select, Stack } from "@shopify/polaris";
+import { Card, Checkbox, Select, Stack, TextField } from "@shopify/polaris";
 import React from "react";
 import {
   btnCloseOptions,
@@ -67,8 +67,17 @@ function Settings({ settings, setSettings }) {
               handleChange={handleChange}
               newUpsell={settings.popupViews}
               radiobutton_data={mustMutch_radiobutton}
+              selectedProduct={true}
             />
           </Stack>
+          <Spasing />
+          {settings.popupViews === "limited" && (
+            <TextField
+              onChange={handleChange("popupViewLimitCount")}
+              type="number"
+              value={settings.popupViewLimitCount}
+            />
+          )}
         </Stack>
       </Stack>
     </Card>

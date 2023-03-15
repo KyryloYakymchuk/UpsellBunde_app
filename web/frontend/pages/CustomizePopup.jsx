@@ -26,7 +26,9 @@ export default function CustomizePopup() {
     popupViews: "unlimited",
     showSubtitle: true,
     showNothx: true,
+    popupViewLimitCount: 100,
   });
+  console.log(settings);
   const [color, setColor] = useState([
     {
       title: "Add / Upgrade",
@@ -35,6 +37,9 @@ export default function CustomizePopup() {
       border: false,
       borderColor: "#FFFFFF",
       borderWidth: 1,
+      hoverBackground: "#008060",
+      hoverText: "#FFFFFF",
+      hoverBorder: "#008060",
     },
     {
       title: "Continue",
@@ -43,6 +48,9 @@ export default function CustomizePopup() {
       border: false,
       borderColor: "#FFFFFF",
       borderWidth: 1,
+      hoverBackground: "#008060",
+      hoverText: "#FFFFFF",
+      hoverBorder: "#008060",
     },
     {
       title: "No, Thank You",
@@ -51,6 +59,9 @@ export default function CustomizePopup() {
       border: false,
       borderColor: "#FFFFFF",
       borderWidth: 1,
+      hoverBackground: "#008060",
+      hoverText: "#FFFFFF",
+      hoverBorder: "#008060",
     },
   ]);
   const [customTextWording, setCustomTextWording] = useState([
@@ -151,7 +162,7 @@ export default function CustomizePopup() {
   useEffect(async () => {
     const docSnap = await getDoc(docRef);
 
-    if (docSnap.data().settings) {
+    if (docSnap.data() && docSnap.data().settings) {
       setUpsellFromDb(docSnap.data());
       setSettings(docSnap.data()?.settings);
       setColor(docSnap.data()?.color);
@@ -207,27 +218,24 @@ export default function CustomizePopup() {
   );
 }
 
-
-
 const CustomizePopupContainer = styled.div`
   display: flex;
   align-items: flex-start;
-  @media(max-width:1440px){
+  @media (max-width: 1440px) {
     flex-direction: column-reverse;
     align-items: center;
   }
-`
+`;
 
 const PopupSettingsBox = styled.div`
-max-width: 675px;
-`
+  max-width: 675px;
+`;
 const PreviewBox = styled.div`
-    max-width: 675px;
-    width: 100%;
+  max-width: 675px;
+  width: 100%;
   position: sticky;
   top: 30px;
-  @media(max-width:1440px){
+  @media (max-width: 1440px) {
     position: static;
   }
-
-`
+`;

@@ -56,7 +56,8 @@ export default function NewUpsell() {
       handle: selectedProduct.handle,
       description: selectedProduct.descriptionHtml || "",
       totalInventory: selectedProduct.totalInventory,
-      images: selectedProduct.images[0]?.originalSrc || "",
+      images:
+        selectedProduct.images[0]?.originalSrc || selectedProduct.images || "",
       options: selectedProduct.options,
       specificProduct:
         newUpsell.display_for !== "all_products"
@@ -65,7 +66,7 @@ export default function NewUpsell() {
               title: spec.title,
               handle: spec.handle,
               totalInventory: spec.totalInventory,
-              images: spec.images[0]?.originalSrc || "",
+              images: spec.images[0]?.originalSrc || spec.images || "",
               options: spec.options,
               description: spec.descriptionHtml || "",
               variants: spec.variants.map((variant) => ({
@@ -87,12 +88,12 @@ export default function NewUpsell() {
         price: variant.price,
         description: selectedProduct.descriptionHtml || "",
         inventoryQuantity: variant.inventoryQuantity,
-        displayName: variant.title || "",
+        displayName: variant.title || variant.displayName || "",
         image: variant.image?.originalSrc || "",
         id: variant.id.split("/").slice(-1)[0],
       })),
     };
-console.log(selectedProduct);
+    console.log(selectedProduct);
     console.log(selectedProductObj);
 
     if (newUpsell.display_for !== "all_products") {

@@ -6,6 +6,33 @@ import { Spasing } from "../style";
 import productIcon from "../../assets/product_icon.png";
 
 function PopupPreview({ settings, color, customTextWording }) {
+  const findButtonsStyle = (index) => {
+    let buttonStyles = `background-color:${color[index].background}; color:${
+      color[index].text
+    }; ${
+      color[index].border
+        ? `border: ${color[index].borderWidth}px solid ${color[index].borderColor}`
+        : `border:none`
+    }`;
+    let hoverButtonStyles = `color:${color[index].hoverText};background-color:${
+      color[index].hoverBackground
+    };${
+      color[index].border
+        ? `border: ${color[index].borderWidth}px solid ${color[index].hoverBorder};`
+        : "border:none;"
+    }
+  `;
+
+    return { buttonStyles, hoverButtonStyles };
+  };
+
+  const findImageSize = () => {
+    return (
+      (settings.imageSize === "imageSizeL" && "70px") ||
+      (settings.imageSize === "imageSizeM" && "50px") ||
+      (settings.imageSize === "imageSizeS" && "40px")
+    );
+  };
   return (
     <Card title="Pop-up preview">
       <Spasing margin={"15px"} />
@@ -19,11 +46,7 @@ function PopupPreview({ settings, color, customTextWording }) {
           <PopupProduct backgroundMain={true}>
             <div style={{ position: "relative" }}>
               <ProductImage
-                imageSize={
-                  (settings.imageSize === "imageSizeL" && "50px") ||
-                  (settings.imageSize === "imageSizeM" && "50px") ||
-                  (settings.imageSize === "imageSizeS" && "40px")
-                }
+                imageSize={findImageSize()}
                 src={productIcon}
                 alt="product image"
               />
@@ -39,11 +62,7 @@ function PopupPreview({ settings, color, customTextWording }) {
           <UpsellItems>
             <PopupProduct>
               <ProductImage
-                imageSize={
-                  (settings.imageSize === "imageSizeL" && "70px") ||
-                  (settings.imageSize === "imageSizeM" && "50px") ||
-                  (settings.imageSize === "imageSizeS" && "40px")
-                }
+                imageSize={findImageSize()}
                 src={productIcon}
                 alt="product image"
               />
@@ -54,13 +73,8 @@ function PopupPreview({ settings, color, customTextWording }) {
               </ProductInfo>
               <ProductButtonWrapper>
                 <CustomizeButton
-                  buttonStyles={`background-color:${
-                    color[0].background
-                  }; color:${color[0].text}; ${
-                    color[0].border
-                      ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
-                      : `border:none`
-                  } `}
+                  buttonStyles={findButtonsStyle(0).buttonStyles}
+                  hoverButtonStyles={findButtonsStyle(0).hoverButtonStyles}
                 >
                   {customTextWording[4].value}
                 </CustomizeButton>
@@ -68,11 +82,7 @@ function PopupPreview({ settings, color, customTextWording }) {
             </PopupProduct>
             <PopupProduct>
               <ProductImage
-                imageSize={
-                  (settings.imageSize === "imageSizeL" && "70px") ||
-                  (settings.imageSize === "imageSizeM" && "50px") ||
-                  (settings.imageSize === "imageSizeS" && "40px")
-                }
+                imageSize={findImageSize()}
                 src={productIcon}
                 alt="product image"
               />
@@ -87,13 +97,8 @@ function PopupPreview({ settings, color, customTextWording }) {
               </ProductInfo>
               <ProductButtonWrapper>
                 <CustomizeButton
-                  buttonStyles={`background-color:${
-                    color[0].background
-                  }; color:${color[0].text}; ${
-                    color[0].border
-                      ? `border: ${color[0].borderWidth}px solid ${color[0].borderColor}`
-                      : `border:none`
-                  } `}
+                  buttonStyles={findButtonsStyle(0).buttonStyles}
+                  hoverButtonStyles={findButtonsStyle(0).hoverButtonStyles}
                 >
                   {customTextWording[2].value}
                 </CustomizeButton>
@@ -102,11 +107,7 @@ function PopupPreview({ settings, color, customTextWording }) {
             <PopupProduct>
               <div style={{ position: "relative" }}>
                 <ProductImage
-                  imageSize={
-                    (settings.imageSize === "imageSizeL" && "70px") ||
-                    (settings.imageSize === "imageSizeM" && "50px") ||
-                    (settings.imageSize === "imageSizeS" && "40px")
-                  }
+                  imageSize={findImageSize()}
                   src={productIcon}
                   alt="product image"
                 />{" "}
@@ -140,25 +141,15 @@ function PopupPreview({ settings, color, customTextWording }) {
             <ButtonGroup>
               {settings.showNothx && (
                 <CustomizeButton
-                  buttonStyles={`background-color:${
-                    color[2].background
-                  }; color:${color[2].text}; ${
-                    color[2].border
-                      ? `border: ${color[2].borderWidth}px solid ${color[2].borderColor}`
-                      : `border:none`
-                  } `}
+                  buttonStyles={findButtonsStyle(2).buttonStyles}
+                  hoverButtonStyles={findButtonsStyle(2).hoverButtonStyles}
                 >
                   {customTextWording[7].value}
                 </CustomizeButton>
               )}
               <CustomizeButton
-                buttonStyles={`background-color:${color[1].background}; color:${
-                  color[1].text
-                }; ${
-                  color[1].border
-                    ? `border: ${color[1].borderWidth}px solid ${color[1].borderColor}`
-                    : `border:none`
-                } `}
+                buttonStyles={findButtonsStyle(1).buttonStyles}
+                hoverButtonStyles={findButtonsStyle(1).hoverButtonStyles}
               >
                 {customTextWording[6].value}
               </CustomizeButton>
@@ -174,7 +165,6 @@ export default PopupPreview;
 
 const ProductButtonWrapper = styled.div`
   max-width: 200px;
-
 `;
 const ButtonGroup = styled.div`
   display: flex;
@@ -203,10 +193,11 @@ const CustomizeButton = styled.button`
   &:disabled {
     filter: opacity(0.5);
   }
-  transition:0.4s;
-  &:hover{
-    transition:0.4s;
+  transition: 0.4s;
+  &:hover {
+    transition: 0.4s;
     transform: scale(1.1);
+    ${({ hoverButtonStyles }) => hoverButtonStyles};
   }
 `;
 const ProductImage = styled.img`

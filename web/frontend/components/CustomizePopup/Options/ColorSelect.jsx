@@ -11,62 +11,59 @@ function ColorSelect({
   showColorPicker,
   handleSelectColorBox,
 }) {
+  let colorSettings = [
+    {
+      label: "Button color",
+      change: "background",
+    },
+    {
+      label: "Text color",
+      change: "text",
+    },
+    {
+      label: "Hover - background",
+      change: "hoverBackground",
+    },
+    {
+      label: "Hover - text color",
+      change: "hoverText",
+    },
+  ];
   return (
     <div>
-      <label>Button color</label>
-      <Spasing />
-      <div style={{ position: "relative" }}>
-        <Stack>
-          <ColorBox
-            onClick={handleSelectColorBox("background", index)}
-            color={color.background}
-          />
-          <TextField
-            disabled
-            value={color.background.replace("#", "")}
-            prefix="#"
-          />
-        </Stack>
-        <Spasing />
+      {colorSettings.map(({ label, change }) => (
+        <React.Fragment key={label}>
+          <label>{label}</label>
+          <Spasing />
+          <div style={{ position: "relative" }}>
+            <Stack>
+              <ColorBox
+                onClick={handleSelectColorBox(change, index)}
+                color={color[change]}
+              />
+              <TextField
+                onChange={(e) => handleChangeColor(change, index, "#" + e)}
+                value={color[change].replace("#", "")}
+                prefix="#"
+              />
+            </Stack>
+            <Spasing />
 
-        <div style={{ position: "absolute", zIndex: "21" }}>
-          {showColorPicker.state &&
-            showColorPicker.index === index &&
-            showColorPicker.flag === "background" && (
-              <SketchPicker
-                onChangeComplete={(e) =>
-                  handleChangeColor("background", index, e.hex)
-                }
-                color={color}
-              />
-            )}
-        </div>
-      </div>
-      <label>Text color</label>
-      <Spasing />
-      <div style={{ position: "relative" }}>
-        <Stack>
-          <ColorBox
-            onClick={handleSelectColorBox("text", index)}
-            color={color.text}
-          />
-          <TextField disabled value={color.text.replace("#", "")} prefix="#" />
-        </Stack>
-        <Spasing />
-        <div style={{ position: "absolute", zIndex: "21" }}>
-          {showColorPicker.state &&
-            showColorPicker.index === index &&
-            showColorPicker.flag === "text" && (
-              <SketchPicker
-                onChangeComplete={(e) =>
-                  handleChangeColor("text", index, e.hex)
-                }
-                color={color}
-              />
-            )}{" "}
-        </div>
-      </div>
-      <Spasing />
+            <div style={{ position: "absolute", zIndex: "21" }}>
+              {showColorPicker.state &&
+                showColorPicker.index === index &&
+                showColorPicker.flag === change && (
+                  <SketchPicker
+                    onChangeComplete={(e) =>
+                      handleChangeColor(change, index, e.hex)
+                    }
+                    color={color}
+                  />
+                )}
+            </div>
+          </div>
+        </React.Fragment>
+      ))}
       <Checkbox
         label="Enable border"
         checked={color.border}
@@ -75,7 +72,7 @@ function ColorSelect({
       <Spasing />
       {color.border && (
         <div>
-          <label>Eneble border</label>
+          <label>Border color</label>
           <Spasing />
 
           <div style={{ position: "relative" }}>
@@ -85,7 +82,9 @@ function ColorSelect({
                 color={color.borderColor}
               />
               <TextField
-                disabled
+                onChange={(e) =>
+                  handleChangeColor("borderColor", index, "#" + e)
+                }
                 value={color.borderColor.replace("#", "")}
                 prefix="#"
               />
@@ -107,6 +106,37 @@ function ColorSelect({
                   <SketchPicker
                     onChangeComplete={(e) =>
                       handleChangeColor("borderColor", index, e.hex)
+                    }
+                    color={color}
+                  />
+                )}
+            </div>
+          </div>
+          <label>Hover - Border color</label>
+          <Spasing />
+
+          <div style={{ position: "relative" }}>
+            <Stack>
+              <ColorBox
+                onClick={handleSelectColorBox("hoverBorder", index)}
+                color={color.hoverBorder}
+              />
+              <TextField
+                onChange={(e) =>
+                  handleChangeColor("hoverBorder", index, "#" + e)
+                }
+                value={color.hoverBorder.replace("#", "")}
+                prefix="#"
+              />
+            </Stack>
+            <Spasing />
+            <div style={{ position: "absolute", zIndex: "21" }}>
+              {showColorPicker.state &&
+                showColorPicker.index === index &&
+                showColorPicker.flag === "hoverBorder" && (
+                  <SketchPicker
+                    onChangeComplete={(e) =>
+                      handleChangeColor("hoverBorder", index, e.hex)
                     }
                     color={color}
                   />
